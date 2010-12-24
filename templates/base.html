@@ -1,0 +1,40 @@
+<html>
+	{% spaceless %}
+	<head>
+		{% block head %}
+		<title>{% block title %}Online reStructuredText editor{% endblock %}</title>
+        <link rel="stylesheet" href="{{ MEDIA_URL }}style/base.css" type="text/css" />
+        <link rel="stylesheet" href="{{ MEDIA_URL }}style/site.css" type="text/css" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		{% endblock %}
+	</head>
+	<body>
+		{% block body_head %}
+		{% endblock %}
+<div id="container">
+    <div id="header">
+        <h1>
+            {% block site_title %}Online reStructuredText editor{% endblock %}
+        </h1>
+    </div>
+    <div id="navigation">
+    	{% block main_nav %}
+        <ul>
+            <li><a href="{% url rsted.views.index %}">Editor</a></li>
+			<li class="ext_link"><a href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">Quick reStructuredText reference</a></li>
+            <li><a href="{% url rsted.views.about %}">About</a></li>
+        </ul>
+		
+		{% endblock %}
+    </div>
+    <div id="content">
+{% block content %}
+{% endblock %}
+    </div>
+    <div id="footer">
+        Copyright © rst.ninjs.org, 2010
+    </div>
+</div>
+	</body>
+	{% endspaceless %}
+</html>

@@ -1,0 +1,8 @@
+*.pyc
+/src/settings_base.py
+/src/settings_local.py
+.project
+.pydevproject
+.settings
+.tmp*
+/var/run

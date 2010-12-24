@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ block.super}}
+	<script type="text/javascript" src="{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
+	
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/skins/simple/style.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/sets/rest/style.css" />
+
+<script type="text/javascript" src="{{ MEDIA_URL }}scripts/editor.js"></script>
+
+<script type="text/javascript">
+    var js_params = {{ js_params|safe }};
+	$(function() {
+	    if (js_params.theme.length) {
+	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
+	    }
+	    if (js_params.rst.length) {
+	        $('#editor').val(js_params.rst);
+	    }
+	});
+
+</script>
+
+{% endblock %}
+
+{% block body_head %}
+<div class="showLinkDialog" style="visibility: hidden; position: absolute;">
+    <center>
+        <input size="38" style="width: 90%; height: 25px; margin-top: 3px;" type="text" />
+    </center>
+    <div class="hider"></div>
+</div>
+{% endblock %}
+
+{% block main_nav %}
+{{block.super}}
+
+<span style="float: right; color: white; padding-right: 1em; padding-top: 0.2em;">
+  <a href="#" id="show_link" class="jslink" style="color: white;">Show link</a>
+</span>
+
+{% endblock %}
+
+{% block content %}
+<table cellpadding="0" cellspacing="0" style="width: 98%; height: 98%; min-height: 600px;">
+	<tr style="height: 2em;">
+        <td rowspan="2" id="editor-td" style="width: 50%;">
+            <textarea id="editor" style="height: 93%; width: 98%;"></textarea>
+        </td>
+		<td style="width: 50%;">
+		  <div class="themes">Theme: <label><input type="radio" value="basic" checked="checked" name="style"/>Basic</label> <label><input type="radio" value="nature" name="style"/>Nature</label> </div>
+		</td>
+	</tr>
+	<tr>
+        <td style="padding-top: 2px; width: 50%;">
+            <iframe id="browse" style="height: 100%; width: 100%; background-color: white;"></iframe>
+        </td>
+	</tr>
+</table>
+{% endblock %}
