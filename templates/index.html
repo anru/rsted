@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    {{ block.super}}
+    {{ super() }}
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
 	
@@ -11,7 +11,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}scripts/editor.js"></script>
 
 <script type="text/javascript">
-    var js_params = {{ js_params|safe }};
+    var js_params = {{ js_params|tojson|safe }};
 	$(function() {
 	    if (js_params.theme.length) {
 	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block main_nav %}
-{{block.super}}
+{{ super() }}
 
 <span style="float: right; color: white; padding-right: 1em; padding-top: 0.2em;">
   <a href="#" id="show_link" class="jslink" style="color: white;">Show link</a>

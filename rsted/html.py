@@ -2,7 +2,7 @@
 import os
 from os.path import join as J
 import sys
-from django.conf import settings
+from flask import current_app as app
 from subprocess import Popen, PIPE
 
 def _popen(cmd, input=None, **kwargs):
@@ -37,8 +37,8 @@ def rst2html(rst, theme=None, opts=None):
         stylesheets.append('%s/%s.css' % (theme, theme))
     rst_opts['stylesheet'] = ','.join([J('var/themes/', p) for p in stylesheets ])
     
-    cmd = '%s %s' % (settings.RST2HRML_CMD, make_opts(rst_opts))
-    out, errs = _popen(cmd, rst.encode(sys.getdefaultencoding()), cwd=settings.PROJECT_ROOT)
+    cmd = '%s %s' % (app.config['RST2HRML_CMD'], make_opts(rst_opts))
+    out, errs = _popen(cmd, rst.encode(sys.getdefaultencoding()), cwd=app.config.root_path)
     if errs and not out:
         return errs
     

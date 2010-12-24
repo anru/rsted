@@ -1,5 +1,4 @@
 <html>
-	{% spaceless %}
 	<head>
 		{% block head %}
 		<title>{% block title %}Online reStructuredText editor{% endblock %}</title>
@@ -20,9 +19,9 @@
     <div id="navigation">
     	{% block main_nav %}
         <ul>
-            <li><a href="{% url rsted.views.index %}">Editor</a></li>
+            <li><a href="{{ url_for('index') }}">Editor</a></li>
 			<li class="ext_link"><a href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">Quick reStructuredText reference</a></li>
-            <li><a href="{% url rsted.views.about %}">About</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
         </ul>
 		
 		{% endblock %}
@@ -36,5 +35,4 @@
     </div>
 </div>
 	</body>
-	{% endspaceless %}
 </html>
