@@ -4,7 +4,12 @@
 		<title>{% block title %}Online reStructuredText editor{% endblock %}</title>
         <link rel="stylesheet" href="{{ MEDIA_URL }}style/base.css" type="text/css" />
         <link rel="stylesheet" href="{{ MEDIA_URL }}style/site.css" type="text/css" />
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}scripts/jquery-1.4.4.min.js"></script>
+	    <script type="text/javascript" src="{{ MEDIA_URL }}scripts/jquery-ui-1.8.7.custom.min.js"></script>
+	    <script type="text/javascript" src="{{ MEDIA_URL }}scripts/jquery.layout.min-1.2.0.js"></script>
+		<script type="text/javascript">
+			
+		</script>
 		{% endblock %}
 	</head>
 	<body>
@@ -18,7 +23,7 @@
     </div>
     <div id="navigation">
     	{% block main_nav %}
-        <ul>
+        <ul class="menu">
             <li><a href="{{ url_for('index') }}">Editor</a></li>
 			<li class="ext_link"><a href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">Quick reStructuredText reference</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
