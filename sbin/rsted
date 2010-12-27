@@ -1,0 +1,51 @@
+#!/usr/bin/python
+
+import os, sys
+from os.path import join as J
+import time
+
+root_path = J(os.path.dirname(os.path.realpath(__file__)), '../')
+root_path = os.path.normpath(root_path)
+sys.path.insert(0, root_path)
+
+from pwl.utils.daemon import BaseDaemon
+from application import app
+
+run_path = J(app.config.root_path, 'var/run')
+
+try:
+    action = sys.argv[1]
+except IndexError:
+    action = 'status'
+    
+class RstedDaemon(BaseDaemon):
+    NO_DAEMONIZE = True
+    NO_WRITE_PID = True
+    
+    def run(self):
+        os.system(J(app.config.root_path, 'rsted.fcgi'))
+    
+    def print_status(self):
+        pidexists = os.path.exists(self.pidfile)
+        print "Pidfile (%s) exists:" % self.pidfile, ('Yes' if pidexists else 'No')
+        if pidexists:
+            pid = self.readpid()
+            count = int(os.popen("ps --pid %d --no-heading| wc -l" % pid).read().strip())
+            running = count > 0
+            print "Running: %s" % ('Yes' if running else 'No')
+        
+
+pidfile = J(run_path, 'fastcgi.pid')
+daemon = RstedDaemon(pidfile)
+
+if action == 'start':
+    daemon.start()
+elif action == 'stop':
+    daemon.stop()
+elif action == 'restart':
+    daemon.restart()
+elif action == 'status':
+    daemon.print_status()
+
+
+    

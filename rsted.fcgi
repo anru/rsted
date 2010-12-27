@@ -1,8 +1,22 @@
 #!/usr/bin/python
+
 import os
-from flup.server.fcgi import WSGIServer
+from os.path import join as J
+from pwl.fastcgi import runfastcgi
 from application import app
 
-socket_path = app.config.get('SOCKET', os.path.join(app.config.root_path, 'rsted.sock'))
-WSGIServer(app, bindAddress=socket_path).run()
+run_path = J(app.config.root_path, 'var/run')
 
+if not os.path.isdir(run_path):
+    os.mkdir(run_path)
+
+# default options
+fcgi_opts = {
+    'daemonize': 'yes',
+    'pidfile': os.path.join(run_path, 'fastcgi.pid'),
+    'method': 'prefork',
+    'socket': os.path.join(run_path, 'rsted.sock'),
+}
+
+args=[]
+runfastcgi(args, **fcgi_opts)
