@@ -109,6 +109,17 @@ def runfastcgi(argset=[], **kwargs):
     if 'help' in options:
         return fastcgi_help()
 
+    if 'run_as' in options:
+        from pwd import getpwnam
+        try:
+            pw = getpwnam(options['run_as'])
+        except KeyError:
+            pw = None
+        if pw:
+            os.setresgid(pw.pw_gid, pw.pw_gid, pw.pw_gid)
+            os.setresuid(pw.pw_uid, pw.pw_uid, pw.pw_uid)
+        
+
     try:
         import flup
     except ImportError, e:

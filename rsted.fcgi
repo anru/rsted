@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import os
 from os.path import join as J
@@ -17,6 +17,10 @@ fcgi_opts = {
     'method': 'prefork',
     'socket': os.path.join(run_path, 'rsted.sock'),
 }
+
+run_as = app.config.get('RUN_AS')
+if run_as:
+    fcgi_opts['run_as'] = run_as
 
 args=[]
 runfastcgi(args, **fcgi_opts)
