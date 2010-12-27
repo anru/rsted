@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # all the imports
-import os
+import os, sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify, make_response
+     
+
 
 from rsted.html import rst2html as _rst2html
 import redis
