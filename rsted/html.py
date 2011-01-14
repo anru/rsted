@@ -4,6 +4,9 @@ from os.path import join as J
 import sys
 from flask import current_app as app
 from subprocess import Popen, PIPE
+import codecs
+
+utf8codec = codecs.lookup('utf-8')
 
 def _popen(cmd, input=None, **kwargs):
     kw = dict(stdout=PIPE, stderr=PIPE, close_fds=os.name != 'nt', universal_newlines=True)
@@ -38,7 +41,7 @@ def rst2html(rst, theme=None, opts=None):
     rst_opts['stylesheet'] = ','.join([J('var/themes/', p) for p in stylesheets ])
     
     cmd = '%s %s' % (app.config['RST2HRML_CMD'], make_opts(rst_opts))
-    out, errs = _popen(cmd, rst.encode('utf-8'), cwd=app.config.root_path)
+    out, errs = _popen(cmd, utf8codec.encode(rst), cwd=app.config.root_path)
     if errs and not out:
         return errs
     
