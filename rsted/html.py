@@ -41,7 +41,7 @@ def rst2html(rst, theme=None, opts=None):
     rst_opts['stylesheet'] = ','.join([J('var/themes/', p) for p in stylesheets ])
     
     cmd = '%s %s' % (app.config['RST2HRML_CMD'], make_opts(rst_opts))
-    out, errs = _popen(cmd, utf8codec.encode(rst), cwd=app.config.root_path)
+    out, errs = _popen(cmd, utf8codec.encode(rst)[0], cwd=app.config.root_path)
     if errs and not out:
         return errs
     
