@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#$system$feature=core
 
 """
 FastCGI (or SCGI, or AJP1.3 ...) server that implements the WSGI protocol.

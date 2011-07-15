@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#$system$feature=core
 
 #Taken from Python 2.7 with permission from/by the original author.
 import sys
