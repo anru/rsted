@@ -1,3 +1,11 @@
 Simple online editor for reStructuredText on Flask.
 
 Try it where: http://rst.ninjs.org/
+
+How to run
+----------
+
+In a virtual environment...::
+
+    pip install -r pip-requirements.txt
+    ./application.py
