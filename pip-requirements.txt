@@ -1,0 +1,5 @@
+flask
+redis
+
+# Docutils (for rst2html)
+http://prdownloads.sourceforge.net/docutils/docutils-0.8.1.tar.gz?download
