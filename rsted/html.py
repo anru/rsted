@@ -15,6 +15,7 @@ default_rst_opts = {
     'file_insertion_enabled': False,
     'raw_enabled': False,
     'stylesheet_path': None,
+    'traceback': True
 }
 
 def rst2html(rst, theme=None, opts=None):
