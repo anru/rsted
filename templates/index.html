@@ -4,7 +4,7 @@
     {{ super() }}
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
-	
+
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/skins/simple/style.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/sets/rest/style.css" />
 
@@ -13,10 +13,10 @@
 <script type="text/javascript">
     var js_params = {{ js_params|tojson|safe }};
 	$(function() {
-	    if (js_params.theme.length) {
+	    if (js_params.theme) {
 	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
 	    }
-	    if (js_params.rst.length) {
+	    if (js_params.rst) {
 	        $('#editor').val(js_params.rst);
 	    }
 	});
@@ -25,41 +25,50 @@
 
 {% endblock %}
 
-{% block body_head %}
-<div class="showLinkDialog" style="visibility: hidden; position: absolute;">
-    <center>
-        <input size="38" style="width: 90%; height: 25px; margin-top: 3px;" type="text" />
-    </center>
-    <div class="hider"></div>
-</div>
-{% endblock %}
 
-{% block main_nav %}
-{{ super() }}
-
-<span style="float: right; color: white; padding-right: 1em; padding-top: 0.2em;">
-  <a href="#" id="as_pdf" class="jslink" style="color: white;">Save as PDF</a>
-  <a href="#" id="show_link" class="jslink" style="color: white;">Show link</a>
-</span>
-
+{% block editor_nav %}
+<ul>
+    <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
+    <li>{% if document %}
+    	<a href="#" id="save" class="jslink">Save</a>
+    {% else %}
+    	<a href="#" id="save_link" class="jslink">Save with unique link</a>
+    {% endif %}
+    </li>
+    <li>
+    {% if document %}
+    <a href="#" id="del_link" class="jslink">
+    {% else %}&nbsp;&nbsp;{% endif %}Delete
+    {% if document %}</a>{% endif %}
+    </li>
+</ul>
 {% endblock %}
 
 {% block content %}
-<table cellpadding="0" cellspacing="0" style="width: 98%; height: 98%; min-height: 600px;">
-	<tr style="height: 2em;">
-        <td rowspan="2" id="editor-td" style="width: 50%;">
-            <textarea id="editor" style="height: 93%; width: 98%;"></textarea>
-        </td>
-		<td style="width: 50%;">
-		  <div class="themes">Theme: <label><input type="radio" value="basic" checked="checked" name="style"/>Basic</label> <label><input type="radio" value="nature" name="style"/>Nature</label> </div>
-		</td>
-	</tr>
-	<tr>
-        <td style="padding-top: 2px; width: 50%;">
-            <iframe id="browse" style="height: 100%; width: 100%; background-color: white;"></iframe>
-        </td>
-	</tr>
-</table>
+<div class="b_page_cont">
+    <div class="b_page_left">
+        <textarea id="editor" rows="15">{{ rst }}</textarea>
+    </div>
+    <div class="b_page_right">
+        <div class="right_nav">
+            <div class="themes left" id="themes">Theme:
+                <input id="t_basic" type="radio" value="basic" checked="checked" name="style"/><label for="t_basic">Basic</label>
+                <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
+            </div>
+            <div class="actions right">
+                <button id="save_link">Save with unique link</button>
+                {% if document %}
+                <button id="del_link">Delete</button>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <iframe src="/srv/rst2html/" id="browse"></iframe>
+    </div>
+</div>
+
+</div>
 
 <form id="save_as_pdf" method="POST" action="/srv/rst2pdf/">
     <input type="hidden" id="as_pdf_rst" name="rst" />

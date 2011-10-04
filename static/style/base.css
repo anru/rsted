@@ -1,93 +1,115 @@
 
-.jslink {
-	text-decoration: none;
-	border-bottom: 1px dotted white;
+html, body, #container {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    background-color: #e1eaef;
 }
 
-.showLinkDialog {
-	height: 40px;
-	width: 400px;
-	border: 1px solid white;
-	background-color: #bcF;
-	-moz-border-radius: 3px;
+#header {
+    background-color: #213A49;
+    text-align: center;
 }
 
-.showLinkDialog .hider {
-	width: 100%;
-	height: 13px;
-	background: -moz-linear-gradient(-90deg, #BBCCFF, #103b67);
-	cursor: pointer;
+#header, #footer {
+    color: #E1EAEF;
 }
 
-#container
+
+#header h1 {
+    margin: 0;
+    padding-top: 11px;
+    font-size: 25px;
+}
+
+menu#navigation
 {
-    margin: 0 30px;
-    background: #fff;
-}
-
-#header
-{
-    background: #cee1f4;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topright: 6px;
-    padding: 11px;
-}
-
-#header h1 { margin: 0; }
-
-#navigation
-{
-    float: left;
+    margin: 0;
+    padding: 0;
     width: 100%;
-    background: #333;
 }
 
-#navigation ul
-{
+#navigation ul {
     margin: 0;
     padding: 0;
 }
 
-#navigation ul li
-{
-    list-style-type: none;
-    display: inline;
-}
 
-#navigation li a
-{
-    display: block;
-    float: left;
-    padding: 5px 10px;
-    color: #fff;
-    text-decoration: none;
-    border-right: 1px solid #fff;
-}
-
-#navigation li a:hover { background: #383; }
-
-#content
-{
+#content {
     clear: left;
-    padding: 11px;
-	background-color: #88B3F9;
+    padding: 2px 11px;
+	/*background-color: #88B3F9;*/
 }
 
-#content h2
-{
+#content h2 {
     color: #000;
     font-size: 160%;
     margin: 0 0 .5em;
 }
 
-#footer
-{
-    background: #333;
+#footer {
+    background: #2e3341;
     text-align: right;
-    padding: 20px;
-	color: white;
-    height: 1%;
+    padding: 11px;
+	color: #E1EAEF;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 0.85em;
+    box-shadow: 0 -1px 1px #2E3341;
+    -moz-box-shadow: 0 -1px 1px #2E3341;
+    -webkit-box-shadow: 0 -1px 1px #2E3341;
+    -ms-box-shadow: 0 -1px 1px #2E3341;
+}
+
+#footer a {
+    color: #E1EAEF;
+}
+
+#footer a:visited {
+    color: #e1e5ef;
 }
 
 li.ext_link {
 }
+
+
+.jslink {
+    text-decoration: none;
+}
+
+.ext_link {
+    text-decoration: underline;
+
+}
+
+
+.showLinkDialog {
+    height: 40px;
+    width: 400px;
+    border: 1px solid white;
+    background-color: #bcF;
+    -moz-border-radius: 3px;
+}
+
+.showLinkDialog .hider {
+    width: 100%;
+    height: 13px;
+    background: -moz-linear-gradient(-90deg, #BBCCFF, #103b67);
+    cursor: pointer;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.ui-widget {
+    font-size: 0.9em !important;
+}
+
+

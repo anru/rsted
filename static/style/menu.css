@@ -1,0 +1,104 @@
+#menu {
+    margin: 0;
+    line-height: 100%;
+}
+
+
+#menu li {
+    float: left;
+    margin: 0 0px;
+    padding: 0 0 0px;
+    position: relative;
+    list-style: none;
+}
+
+
+/* main level link */
+#menu li a {
+    color: #e7e5e5;
+    background: transparent;
+    text-decoration: none;
+    display: block;
+    padding:  8px 10px;
+    margin: 0;
+    /*text-shadow: 0 1px 1px rgba(0,0,0, 1);*/
+    border: 1px solid transparent;
+}
+
+#menu li.active a {
+    color: #213A49;
+    background-color: #E1EAEF;
+}
+
+
+
+/* dropdown */
+#menu li:hover > ul {
+    display: block;
+}
+
+/* level 2 list */
+#menu ul {
+    display: none;
+    z-index: 50;
+    margin: 0;
+    padding: 0;
+    width: 185px;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    background: #213A49;
+    /*border: solid 1px #848484;*/
+
+    -webkit-box-shadow: 0 1px 3px #213A49;
+    -moz-box-shadow: 0 1px 3px #213A49;
+    box-shadow: 0 1px 3px #213A49;
+}
+#menu ul li {
+    float: none;
+    margin: 0;
+    padding: 0;
+}
+
+#menu ul li a {
+    display: block;
+    width: 160px;
+    background: transparent;
+    padding: 3px 7px;
+    color: #fff !important;
+    border: 1px solid transparent;
+}
+
+/* sub levels link hover */
+#menu li a:hover {
+    text-decoration: underline;
+}
+
+#menu li.active a:hover {
+    text-decoration: none;
+}
+
+
+
+#menu li a.jslink:hover {
+
+}
+
+#menu li ul li {
+    border-bottom: 1px solid #6f6658;
+    padding: 3px 4px;
+    width: 174px;
+}
+#menu li ul li:last-child {
+    border-bottom: none;
+}
+
+/* clearfix */
+#menu:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}

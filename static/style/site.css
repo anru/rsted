@@ -1,8 +1,47 @@
-table tr {
-	vertical-align: top;
+
+.b_page_cont, .b_page_left  {
+    position: relative;
 }
 
+.b_page_left {
+    display: block;
+    width: 48.5%;
+}
+
+.b_page_center {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.b_page_right {
+    margin-left: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.themes {
+    display: inline-block;
+}
+
+#editor {
+    min-height: 75px;
+}
 
 #browse {
-	border: 2px ridge #CCC;
+	border: 1px solid #CCC;
+	position: relative;
+	margin-top: 1px;
+	height: 330px;
+
+	width: 100%;
+	background-color: white;
+}
+
+#editor {
+    width: 100%;
+    resize: vertical;
 }

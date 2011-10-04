@@ -1,49 +1,34 @@
 
 import os
-from os.path import join as J
 import sys
-from flask import current_app as app
-from subprocess import Popen, PIPE
-import codecs
+from os.path import join as J
+#import codecs
 
-utf8codec = codecs.lookup('utf-8')
+from docutils.core import publish_string
 
-def _popen(cmd, input=None, **kwargs):
-    kw = dict(stdout=PIPE, stderr=PIPE, close_fds=os.name != 'nt', universal_newlines=True)
-    if input is not None:
-        kw['stdin'] = PIPE
-    kw.update(kwargs)
-    p = Popen(cmd, shell=True, **kw)
-    return p.communicate(input)
+#utf8codec = codecs.lookup('utf-8')
 
 default_rst_opts = {
-    'no-generator': None,
-    'no-source-link': None,
-    'tab-width': 4
+    'no_generator': True,
+    'no_source_link': True,
+    'tab_width': 4,
+    'file_insertion_enabled': False,
+    'raw_enabled': False,
+    'stylesheet_path': None,
 }
-
-def make_opts(d):
-    result = []
-    for key, value in d.items():
-        r = '='.join([str(x) for x in ('--%s' % key, value) if x is not None])
-        result.append(r)
-    return ' '.join(result)
 
 def rst2html(rst, theme=None, opts=None):
     rst_opts = default_rst_opts.copy()
     if opts:
         rst_opts.update(opts)
     rst_opts['template'] = 'var/themes/template.txt'
-    
+
     stylesheets = ['basic.css']
     if theme:
         stylesheets.append('%s/%s.css' % (theme, theme))
     rst_opts['stylesheet'] = ','.join([J('var/themes/', p) for p in stylesheets ])
-    
-    cmd = '%s %s' % (app.config['RST2HTML_CMD'], make_opts(rst_opts))
-    out, errs = _popen(cmd, utf8codec.encode(rst)[0], cwd=app.config.root_path)
-    if errs and not out:
-        return errs
-    
+
+    out = publish_string(rst, writer_name='html', settings_overrides=rst_opts)
+
     return out
-    
+
