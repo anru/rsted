@@ -92,16 +92,27 @@ $(function() {
 	
 	$('#show_link').click(function(e) {
 		
-		$.ajax({
-			'url': '/srv/save_rst/',
-			'type': 'POST',
-			'data': {'rst': $('#editor').val()},
-			'success': function(response) {
-				showLinkDialog(getCurrentLink(response + ''));
-			}
-		})
+        $.ajax({
+            'url': '/srv/save_rst/',
+            'type': 'POST',
+            'data': {'rst': $('#editor').val()},
+            'success': function(response) {
+                showLinkDialog(getCurrentLink(response + ''));
+            }
+
+		});
 		
 		e.preventDefault();
 		return false;
 	});
+
+    $('#as_pdf').click(function(e) {
+        var form = $('#save_as_pdf');
+        $('#as_pdf_rst').attr('value', $("#editor").val());
+        $('#as_pdf_theme').attr('value', getSelectedTheme());
+        form.submit();
+
+        e.preventDefault();
+        return false;
+    });
 });

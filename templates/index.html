@@ -38,6 +38,7 @@
 {{ super() }}
 
 <span style="float: right; color: white; padding-right: 1em; padding-top: 0.2em;">
+  <a href="#" id="as_pdf" class="jslink" style="color: white;">Save as PDF</a>
   <a href="#" id="show_link" class="jslink" style="color: white;">Show link</a>
 </span>
 
@@ -59,4 +60,10 @@
         </td>
 	</tr>
 </table>
+
+<form id="save_as_pdf" method="POST" action="/srv/rst2pdf/">
+    <input type="hidden" id="as_pdf_rst" name="rst" />
+    <input type="hidden" id="as_pdf_theme" name="theme"/>
+</form>
+
 {% endblock %}
