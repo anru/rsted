@@ -17,6 +17,7 @@ fcgi_opts = {
     'method': 'prefork',
     'socket': os.path.join(run_path, 'rsted.sock'),
     'workdir': app.config.root_path,
+    'maxrequests': 100,
 }
 
 run_as = app.config.get('RUN_AS')
