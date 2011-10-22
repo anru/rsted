@@ -8,6 +8,7 @@ from docutils.core import publish_string
 
 #utf8codec = codecs.lookup('utf-8')
 
+# see http://docutils.sourceforge.net/docs/user/config.html
 default_rst_opts = {
     'no_generator': True,
     'no_source_link': True,
@@ -15,7 +16,8 @@ default_rst_opts = {
     'file_insertion_enabled': False,
     'raw_enabled': False,
     'stylesheet_path': None,
-    'traceback': True
+    'traceback': True,
+    'halt_level': 5,
 }
 
 def rst2html(rst, theme=None, opts=None):
