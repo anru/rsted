@@ -29,12 +29,37 @@ miu = new function() {
 		return r;
 	}
 	
+    var wcwidth = function (ucs) {
+        if (ucs < 0x1100)
+          return 1;
+    
+        if ((ucs >= 0x1100 && ucs <= 0x115f) || /* Hangul Jamo */
+          (ucs >= 0x2e80 && ucs <= 0xa4cf && (ucs & ~0x0011) != 0x300a &&
+           ucs != 0x303f) ||                     /* CJK ... Yi */
+          (ucs >= 0xac00 && ucs <= 0xd7a3) || /* Hangul Syllables */
+          (ucs >= 0xf900 && ucs <= 0xfaff) || /* CJK Compatibility Ideographs */
+          (ucs >= 0xfe30 && ucs <= 0xfe6f) || /* CJK Compatibility Forms */
+          (ucs >= 0xff00 && ucs <= 0xff5f) || /* Fullwidth Forms */
+          (ucs >= 0xffe0 && ucs <= 0xffe6)) {
+        return 2;
+        }
+        return 1;
+    }
+	
+	var strByteLen = this.strByteLen = function(str) {
+      var count = 0;
+      for(var i=0; i < str.length; i++) {
+          count += wcwidth(str.charCodeAt(i));
+      }
+      return count;
+	}
+	
     this.markText = function(markItUp, ch, breakBefore) {
         if (typeof breakBefore == 'undefined') {
             breakBefore = true;
         }
         var heading = '';
-        var n = $.trim(markItUp.selection||markItUp.placeHolder).length;
+        var n = strByteLen($.trim(markItUp.selection||markItUp.placeHolder));
         for(var i = 0; i < n; i++) {
             heading += ch;
         }
