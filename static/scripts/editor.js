@@ -38,7 +38,18 @@ function setPreviewHtml(html) {
     doc.open();
     doc.writeln(html);
     doc.close();
-
+    var body = doc.body;
+    
+    var titleText = null;
+    var headElem = $('h1', body)[0] || $('h2', body)[0] || $('h3', body)[0] || $('h4', body)[0] || $('h5', body)[0] || $('p', body)[0];
+    if (headElem) {
+        titleText = headElem.innerText || headElem.textContent;
+    }
+    if (titleText) {
+        $('head title').html(titleText.substr(0, 55) + ' - ' + window.baseTitle);
+    } else {
+        $('head title').html(window.baseTitle);
+    }
 }
 
 var activeXhr = null;
@@ -85,6 +96,8 @@ function adjustBrowse() {
 
 $(function() {
     //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
+    
+    window.baseTitle = $('head title').text();
 
     $('textarea#editor').bind('change', genPreview).markItUp(mySettings);
     timerId = window.setInterval(genPreview, 900);
@@ -136,24 +149,6 @@ $(function() {
 
         e.preventDefault();
         return false;
-    });
-
-    //cache nav
-    var nav = $("#navigation");
-
-    //add indicator and hovers to submenu parents
-    nav.find("li").each(function() {
-        if ($(this).find("ul").length > 0) {
-            //show subnav on hover
-            $(this).mouseenter(function() {
-                $(this).find("ul").css('display', '');
-            });
-
-            //hide submenus on exit
-            $(this).mouseleave(function() {
-                $(this).find("ul").css('display', 'none');
-            });
-        }
     });
 
      adjustBrowse();
