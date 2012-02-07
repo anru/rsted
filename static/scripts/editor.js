@@ -39,7 +39,7 @@ function setPreviewHtml(html) {
     doc.writeln(html);
     doc.close();
     var body = doc.body;
-    
+
     var titleText = null;
     var headElem = $('h1', body)[0] || $('h2', body)[0] || $('h3', body)[0] || $('h4', body)[0] || $('h5', body)[0] || $('p', body)[0];
     if (headElem) {
@@ -50,6 +50,43 @@ function setPreviewHtml(html) {
     } else {
         $('head title').html(window.baseTitle);
     }
+}
+
+function getScrollHeight($prevFrame) {
+    // Different browsers attach the scrollHeight of a document to different
+    // elements, so handle that here.
+    if ($prevFrame[0].scrollHeight !== undefined) {
+        return $prevFrame[0].scrollHeight;
+    } else if ($prevFrame.find('html')[0].scrollHeight !== undefined &&
+               $prevFrame.find('html')[0].scrollHeight !== 0) {
+        return $prevFrame.find('html')[0].scrollHeight;
+    } else {
+        return $prevFrame.find('body')[0].scrollHeight;
+    }
+}
+
+/**
+ * syncScrollPosition
+ *
+ * Synchronize the scroll positions between the editor and preview panes.
+ * Specifically, this function will match the percentages that each pane is
+ * scrolled (i.e., if one is scrolled 25% of its total scroll height, the
+ * other will be too).
+ */
+function syncScrollPosition() {
+    var $ed = $('textarea#editor');
+    var $prev = $('#browse');
+
+    var editorScrollRange = ($ed[0].scrollHeight - $ed.innerHeight());
+    var previewScrollRange = (getScrollHeight($prev.contents()) - $prev.innerHeight());
+
+    // Find how far along the editor is (0 means it is scrolled to the top, 1
+    // means it is at the bottom).
+    var scrollFactor = $ed.scrollTop() / editorScrollRange;
+
+    // Set the scroll position of the preview pane to match.  jQuery will
+    // gracefully handle out-of-bounds values.
+    $prev.contents().scrollTop(scrollFactor * previewScrollRange);
 }
 
 var activeXhr = null;
@@ -72,6 +109,7 @@ function genPreview() {
         },
         'success': function(response) {
             setPreviewHtml(response);
+            syncScrollPosition();
             activeXhr = null;
         }
     });
@@ -96,7 +134,7 @@ function adjustBrowse() {
 
 $(function() {
     //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
-    
+
     window.baseTitle = $('head title').text();
 
     $('textarea#editor').bind('change', genPreview).markItUp(mySettings);
@@ -104,6 +142,8 @@ $(function() {
     window.setTimeout(function() {
         $('#editor-td > div').css({'width': '100%', 'height': '96%'});
     }, 200);
+
+    $('textarea#editor').scroll(syncScrollPosition);
 
     $('.themes input').bind('change', function() {
         lastContent = null;
