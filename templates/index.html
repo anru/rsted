@@ -26,23 +26,6 @@
 {% endblock %}
 
 
-{% block editor_nav %}
-<ul>
-    <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
-    <li>{% if document %}
-    	<a href="#" id="save" class="jslink">Save</a>
-    {% else %}
-    	<a href="#" id="save_link" class="jslink">Save with unique link</a>
-    {% endif %}
-    </li>
-    <li>
-    {% if document %}
-    <a href="#" id="del_link" class="jslink">
-    {% else %}&nbsp;&nbsp;{% endif %}Delete
-    {% if document %}</a>{% endif %}
-    </li>
-</ul>
-{% endblock %}
 
 {% block content %}
 <div class="b_page_cont">
@@ -51,19 +34,23 @@
     </div>
     <div class="b_page_right">
         <div class="right_nav">
+
             <div class="themes left" id="themes">Theme:
                 <input id="t_basic" type="radio" value="basic" checked="checked" name="style"/><label for="t_basic">Basic</label>
                 <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
-            </div>
-            <div class="actions right">
-                <button id="save_link">Save with unique link</button>
+                <button id="as_pdf" class="jslink">Export to PDF</button>
+                <button id="as_txt" class="jslink">Save reST</button>
+                <button id="get_link" class="jslink">Get Link</button>
                 {% if document %}
-                <button id="del_link">Delete</button>
+                    <button id="del_link" class="jslink">Delete</button>
                 {% endif %}
             </div>
+
+            <div class="actions right">
+                <ul>
+                </ul>
+            </div>
         </div>
-
-
         <iframe src="/srv/rst2html/" id="browse"></iframe>
     </div>
 </div>
@@ -75,4 +62,7 @@
     <input type="hidden" id="as_pdf_theme" name="theme"/>
 </form>
 
+<form id="save_as_txt" method="POST" action="/srv/rst2txt/">
+    <input type="hidden" id="as_txt_rst" name="rst" />
+</form>
 {% endblock %}
