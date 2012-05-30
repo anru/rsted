@@ -54,9 +54,10 @@ def about():
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
 def rst2html():
     rst = request.form.get('rst', '')
-    theme = request.form.get('theme')
-    if theme == 'basic':
-        theme = None
+    #theme = request.form.get('theme')
+    #if theme == 'basic':
+    #    theme = None
+    theme = None
     html = _rst2html(rst, theme=theme)
     return html
 
