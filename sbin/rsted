@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/python
 
 import os, sys
 from os.path import join as J
@@ -11,7 +11,7 @@ sys.path.insert(0, root_path)
 from pwl.utils.daemon import BaseDaemon
 from application import app
 
-run_path = J(app.config.root_path, 'var/run')
+run_path = J(app.config.root_path, app.config.get('RUN_PATH', 'var/run'))
 
 try:
     action = sys.argv[1]
@@ -23,7 +23,7 @@ class RstedDaemon(BaseDaemon):
     NO_WRITE_PID = True
     
     def run(self):
-        os.system(J(app.config.root_path, 'rsted.fcgi'))
+        os.system('python ' + J(app.config.root_path, 'rsted.fcgi'))
     
     def print_status(self):
         pidexists = os.path.exists(self.pidfile)
@@ -33,7 +33,26 @@ class RstedDaemon(BaseDaemon):
             count = int(os.popen("ps --pid %d --no-heading| wc -l" % pid).read().strip())
             running = count > 0
             print "Running: %s" % ('Yes' if running else 'No')
-        
+
+    def is_running(self):
+        pidexists = os.path.exists(self.pidfile)
+        if pidexists:
+            pid = self.readpid()
+            count = int(os.popen("ps --pid %d --no-heading| wc -l" % pid).read().strip())
+            return count > 0
+        return False
+
+    def ensure_started(self):
+        if not self.is_running():
+            self.delpid()
+            self.start()
+
+            chmod_socket = app.config.get('CHMOD_SOCKET')
+            socket_file = os.path.join(run_path, app.config.get('SOCKET_FILE', 'rsted.sock'))
+
+            if chmod_socket:
+                chmod_socket = str(chmod_socket)
+                os.popen("chmod %s %s" % (chmod_socket, socket_file))
 
 pidfile = J(run_path, 'fastcgi.pid')
 daemon = RstedDaemon(pidfile)
@@ -46,6 +65,10 @@ elif action == 'restart':
     daemon.restart()
 elif action == 'status':
     daemon.print_status()
-
+elif action == 'check':
+    if not daemon.is_running():
+        sys.exit(1)
+elif action == 'ensure_started':
+    daemon.ensure_started()
 
     

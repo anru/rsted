@@ -123,7 +123,7 @@ def runfastcgi(argset=[], **kwargs):
         import flup
     except ImportError, e:
         print >> sys.stderr, 'ERROR: %s' % e
-        print >> sys.stderr, '  Unable to load the flup package.  In order to run pyzzle'
+        print >> sys.stderr, '  Unable to load the flup package.  In order to run rsted'
         print >> sys.stderr, '  as a FastCGI application, you will need to get flup from'
         print >> sys.stderr, "  http://www.saddi.com/software/flup/   If you've already"
         print >> sys.stderr, '  installed flup, then make sure you have it in your PYTHONPATH.'
