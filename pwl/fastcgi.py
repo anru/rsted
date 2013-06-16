@@ -64,9 +64,6 @@ Examples:
         daemonize=true pidfile=/var/run/django-fcgi.pid
 
 """
-from application import app
-
-def_umask = '002'
 
 FASTCGI_OPTIONS = {
     'protocol': 'fcgi',
@@ -84,8 +81,8 @@ FASTCGI_OPTIONS = {
     'debug': False,
     'outlog': None,
     'errlog': None,
-    'umask': app.config.get('FCGI_UMASK', def_umask)
-    }
+    'umask': '002'
+}
 
 
 def fastcgi_help(message=None):
@@ -95,7 +92,7 @@ def fastcgi_help(message=None):
     return False
 
 
-def runfastcgi(argset=[], **kwargs):
+def runfastcgi(app, argset=[], **kwargs):
     options = FASTCGI_OPTIONS.copy()
     options.update(kwargs)
     for x in argset:

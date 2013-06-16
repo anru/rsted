@@ -18,6 +18,7 @@ fcgi_opts = {
     'socket': os.path.join(full_run_path, app.config.get('SOCKET_FILE', 'rsted.sock')),
     'workdir': app.config.root_path,
     'maxrequests': 100,
+    'umask': app.config.get('FCGI_UMASK', '002')
 }
 
 run_as = app.config.get('RUN_AS')
@@ -25,4 +26,4 @@ if run_as:
     fcgi_opts['run_as'] = run_as
 
 args=[]
-runfastcgi(args, **fcgi_opts)
+runfastcgi(app, args, **fcgi_opts)

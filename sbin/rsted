@@ -47,13 +47,6 @@ class RstedDaemon(BaseDaemon):
             self.delpid()
             self.start()
 
-            chmod_socket = app.config.get('CHMOD_SOCKET')
-            socket_file = os.path.join(run_path, app.config.get('SOCKET_FILE', 'rsted.sock'))
-
-            if chmod_socket:
-                chmod_socket = str(chmod_socket)
-                os.popen("chmod %s %s" % (chmod_socket, socket_file))
-
 pidfile = J(run_path, 'fastcgi.pid')
 daemon = RstedDaemon(pidfile)
 
