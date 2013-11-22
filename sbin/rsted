@@ -23,7 +23,8 @@ class RstedDaemon(BaseDaemon):
     NO_WRITE_PID = True
     
     def run(self):
-        os.system('python ' + J(app.config.root_path, 'rsted.fcgi'))
+        os.system('%s %s' % (app.config.get('PYTHON_PATH', 'python'),
+                             J(app.config.root_path, 'rsted.fcgi')))
     
     def print_status(self):
         pidexists = os.path.exists(self.pidfile)
