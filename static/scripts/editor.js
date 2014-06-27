@@ -7,7 +7,7 @@ function getSelectedTheme() {
             theme = this.value;
             return false;
         }
-    })
+    });
     return theme;
 }
 
@@ -101,7 +101,7 @@ function genPreview() {
     }
     lastContent = rstContent;
     activeXhr = $.ajax({
-        'url': '/srv/rst2html/',
+        'url': script_root + '/srv/rst2html/',
         'data': {'rst': rstContent, 'theme': getSelectedTheme()},
         'type': 'POST',
         'error': function(xhr) {
@@ -119,9 +119,9 @@ var timerId = null;
 
 function getCurrentLink(res) {
     if (!res) {
-        return 'http://' + window.location.host + '/?theme=' + getSelectedTheme();
+        return '//' + window.location.host + script_root + '/?theme=' + getSelectedTheme();
     }
-    return 'http://' + window.location.host + '/?n=' + res + '&theme=' + getSelectedTheme();
+    return '//' + window.location.host + script_root + '/?n=' + res + '&theme=' + getSelectedTheme();
 }
 
 function adjustBrowse() {
@@ -153,7 +153,7 @@ $(function() {
     $('#save_link').click(function(e) {
 
         $.ajax({
-            'url': '/srv/save_rst/',
+            'url': script_root + '/srv/save_rst/',
             'type': 'POST',
             'data': {'rst': $('textarea#editor').val()},
             'success': function(response) {
@@ -169,7 +169,7 @@ $(function() {
 
     $('#del_link').click(function(e) {
         $.ajax({
-            'url': '/srv/del_rst/',
+            'url': script_root + '/srv/del_rst/',
             'type': 'GET',
             'data': {'n': getCurrentDocument()},
             'success': function(response) {
