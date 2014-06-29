@@ -125,7 +125,9 @@ function restLink(markItUp) {
 }
 
 mySettings = {
-	previewParserPath:	'',
+	previewParserPath:	'/srv/rst2html',
+    previewParserVar: 'rst',
+    previewAutoRefresh: true,
 	onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
 	markupSet: [
 		{name:'# with overline, for parts', text:'##', key:'1', placeHolder:'Part title..', openWith: miu.makeMarkUp('='), closeWith: miu.makeMarkDown('=')},

@@ -5,74 +5,62 @@
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/skins/simple/style.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/sets/rest/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/skins/simple/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/sets/rest/style.css" />
 
-<script type="text/javascript" src="{{ MEDIA_URL }}scripts/editor.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}scripts/editor.js"></script>
 
-<script type="text/javascript">
-    var js_params = {{ js_params|tojson|safe }};
-	$(function() {
-	    if (js_params.theme) {
-	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
-	    }
-	    if (js_params.rst) {
-	        $('#editor').val(js_params.rst);
-	    }
-	});
-
-</script>
+    <!--<script type="text/javascript">-->
+        <!--var js_params = {{ js_params|tojson|safe }};-->
+        <!--$(function() {-->
+            <!--if (js_params.theme) {-->
+                <!--$('.themes input[value='+ js_params.theme + ']')[0].checked = true;-->
+            <!--}-->
+            <!--if (js_params.rst) {-->
+                <!--$('#editor').val(js_params.rst);-->
+            <!--}-->
+        <!--});-->
+    <!--</script>-->
 
 {% endblock %}
 
 
-{% block editor_nav %}
-<ul>
-    <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
-    <li>{% if document %}
-    	<a href="#" id="save" class="jslink">Save</a>
-    {% else %}
-    	<a href="#" id="save_link" class="jslink">Save with unique link</a>
-    {% endif %}
-    </li>
-    <li>
-    {% if document %}
-    <a href="#" id="del_link" class="jslink">
-    {% else %}&nbsp;&nbsp;{% endif %}Delete
-    {% if document %}</a>{% endif %}
-    </li>
-</ul>
-{% endblock %}
 
 {% block content %}
-<div class="b_page_cont">
-    <div class="b_page_left">
-        <textarea id="editor" rows="15">{{ rst }}</textarea>
-    </div>
-    <div class="b_page_right">
-        <div class="right_nav">
-            <div class="themes left" id="themes">Theme:
-                <input id="t_basic" type="radio" value="basic" checked="checked" name="style"/><label for="t_basic">Basic</label>
-                <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <textarea class="input-xxlarge" id="editor" rows="15">{{ rst }}</textarea>
+        </div>
+        <div class="span6">
+            <div class="preview-pane-navpills">
+                <ul class="nav nav-pills">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Theme
+                            <b class="caret"></b>
+                        </a>
+                        <ul id="menu1" class="dropdown-menu">
+                            <li><a href="#">Basic</a></li>
+                            <li><a href="#">Nature</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Save/Export</a></li>
+                </ul>
             </div>
-            <div class="actions right">
-                <button id="save_link">Save with unique link</button>
-                {% if document %}
-                <button id="del_link">Delete</button>
-                {% endif %}
+            <div class="rst-preview-pane">
+                <iframe class="input-xxlarge" id="browse"></iframe>
             </div>
         </div>
-
-
-        <iframe src="/srv/rst2html/" id="browse"></iframe>
     </div>
 </div>
-
-</div>
+{% endblock %}
 
 <form id="save_as_pdf" method="POST" action="/srv/rst2pdf/">
     <input type="hidden" id="as_pdf_rst" name="rst" />
     <input type="hidden" id="as_pdf_theme" name="theme"/>
 </form>
 
-{% endblock %}
+<form id="save_as_txt" method="POST" action="/srv/rst2txt/">
+    <input type="hidden" id="as_txt_rst" name="rst" />
+</form>

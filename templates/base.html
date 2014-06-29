@@ -3,52 +3,50 @@
     <head>
         {% block head %}
         <meta charset="UTF-8">
-        <title>{% block title %}Online reStructuredText editor{% endblock %}</title>
+        <!--<title>{% block title %}Online reStructuredText editor{% endblock %}</title>-->
 
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/base.css"/>
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/site.css"/>
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/menu.css"/>
+        <!--<link rel="stylesheet" href="{{ MEDIA_URL }}style/base.css"/>-->
+        <!--<link rel="stylesheet" href="{{ MEDIA_URL }}style/site.css"/>-->
+        <!--<link rel="stylesheet" href="{{ MEDIA_URL }}style/menu.css"/>-->
 
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/overcast/jquery-ui-1.8.16.custom.css" />
+        <!--<link rel="stylesheet" href="{{ MEDIA_URL }}style/overcast/jquery-ui-1.8.16.custom.css" />-->
+        <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/bootstrap.css"/>
 
-
-        <script src="{{ MEDIA_URL }}scripts/jquery-1.6.4.min.js"></script>
+        <script src="{{ MEDIA_URL }}js/jquery-1.7.2.js"></script>
         <script src="{{ MEDIA_URL }}scripts/jquery-ui-1.8.16.custom.min.js"></script>
         <script src="{{ MEDIA_URL }}scripts/jquery.layout.min-1.2.0.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap.js"></script>
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
 
         {% endblock %}
     </head>
     <body>
-        <a id="github-ribbon" href="http://github.com/anru/rsted">Fork me on GitHub</a>
-        {% block body_head %}
+        {% block topbar %}
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="brand" href="#">rSTed: reStructuredTextEditor</a>
+                        <ul class="nav">
+                            <li class="active"><a href="{{ url_for('index') }}">Editor</a></li>
+                            <li><a href="{{ url_for('about') }}">About</a></li>
+                            <li><a id="github-ribbon" href="http://github.com/anru/rsted">Fork me on GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         {% endblock %}
-        <header id="header">
-            <h1>{% block site_title %}Online reStructuredText editor{% endblock %}</h1>
-            <menu id="navigation">
-                {%- block main_nav %}
-                <ul class="menu" id="menu">
-                    <li class="{{ is_active('index') }}"><a href="{{ url_for('index') }}">Editor</a>
-                    </li>
-                    <li class="{{ is_active('about') }}"><a href="{{ url_for('about') }}">About</a></li>
-                </ul>
-                {% endblock -%}
-            </menu>
-        </header>
-        <script type="text/javascript">
-            $('#navigation').find("li.active a").click(function(evt) {
-                 evt.preventDefault();
-             });
-        </script>
 
-        <div id="content">
-            {%- block content %}
-            {% endblock -%}
-        </div>
+        {% block content %}
+        {% endblock %}
 
         <footer id="footer">
             <span class="left"><a target="_blank" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">Quick reStructuredText reference</a></span>
             <span class="right">Copyright © rst.ninjs.org, 2011</span>
         </footer>
-
     </body>
 </html>

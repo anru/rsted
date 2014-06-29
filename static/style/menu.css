@@ -10,6 +10,7 @@
     padding: 0 0 0px;
     position: relative;
     list-style: none;
+    text-decoration: none;
 }
 
 
@@ -55,9 +56,10 @@
     box-shadow: 0 1px 3px #213A49;
 }
 #menu ul li {
-    float: none;
+    float: right;
     margin: 0;
     padding: 0;
+    text-decoration: none;
 }
 
 #menu ul li a {

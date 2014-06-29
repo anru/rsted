@@ -150,10 +150,10 @@ $(function() {
         genPreview();
     });
 
-    $('#save_link').click(function(e) {
+    $('#get_link').click(function(e) {
 
         $.ajax({
-            'url': '/srv/save_rst/',
+            'url': '/srv/get_link/',
             'type': 'POST',
             'data': {'rst': $('textarea#editor').val()},
             'success': function(response) {
@@ -185,6 +185,15 @@ $(function() {
         var form = $('#save_as_pdf');
         $('#as_pdf_rst').attr('value', $("#editor").val());
         $('#as_pdf_theme').attr('value', getSelectedTheme());
+        form.submit();
+
+        e.preventDefault();
+        return false;
+    });
+
+    $('#as_txt').click(function(e) {
+        var form = $('#save_as_txt');
+        $('#as_txt_rst').attr('value', $("#editor").val());
         form.submit();
 
         e.preventDefault();

@@ -2,6 +2,7 @@ flup
 flask
 redis
 rst2pdf
+roman
 
 # Docutils (for rst2html)
 docutils

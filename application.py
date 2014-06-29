@@ -58,9 +58,10 @@ def about():
 @app.route('/srv/rst2html/', methods=['POST', 'GET'])
 def rst2html():
     rst = request.form.get('rst', '')
-    theme = request.form.get('theme')
-    if theme == 'basic':
-        theme = None
+    #theme = request.form.get('theme')
+    #if theme == 'basic':
+    #    theme = None
+    theme = None
     html = _rst2html(rst, theme=theme)
     return html
 
@@ -72,14 +73,23 @@ def rst2pdf():
         theme = None
 
     pdf = _rst2pdf(rst, theme=theme)
-    responce = make_response(pdf)
-    responce.headers['Content-Type'] = 'application/pdf'
-    responce.headers['Content-Disposition'] = 'attachment; filename="rst.pdf"'
-    responce.headers['Content-Transfer-Encoding'] = 'binary'
-    return responce
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename="rst.pdf"'
+    response.headers['Content-Transfer-Encoding'] = 'binary'
+    return response
 
-@app.route('/srv/save_rst/', methods=['POST'])
-def save_rst():
+@app.route('/srv/rst2txt/', methods=['POST'])
+def rst2txt():
+    rst = request.form.get('rst', '')
+
+    response = make_response(rst)
+    response.headers['Content-Type'] = 'text/plain'
+    response.headers['Content-Disposition'] = 'attachment; filename="rst.txt"'
+    return response
+
+@app.route('/srv/get_link/', methods=['POST'])
+def get_link():
     rst = request.form.get('rst')
     if not rst:
         return ''
@@ -92,7 +102,6 @@ def save_rst():
     if redis.setnx(redis_key, rst) and REDIS_EXPIRE:
         redis.expire(redis_key, REDIS_EXPIRE)
     response = make_response(md5sum)
-    response.headers['Content-Type'] = 'text/plain'
     return response
 
 @app.route('/srv/del_rst/', methods=['GET'])

@@ -22,6 +22,14 @@ html, body, #container {
     font-size: 25px;
 }
 
+ul {
+    list-style: none;
+}
+
+ul li {
+    float: right;
+}
+
 menu#navigation
 {
     margin: 0;
@@ -32,6 +40,7 @@ menu#navigation
 #navigation ul {
     margin: 0;
     padding: 0;
+    list-style: none
 }
 
 
@@ -131,7 +140,7 @@ a#github-ribbon {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#444444', endColorstr='#444444',GradientType=0 ); /* IE6-9 */
   background: linear-gradient(top, #444444 0%,#666666 50%,#444444 100%); /* W3C */
 
-  text-shadow: #333 1px 1px 1px; 
+  text-shadow: #333 1px 1px 1px;
   text-align: center;
   text-decoration: none;
   font-weight: bold;

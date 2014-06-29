@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------------
 // markItUp! Universal MarkUp Engine, JQuery plugin
-// v 1.1.7
+// v 1.1.x
 // Dual licensed under the MIT and GPL licenses.
 // ----------------------------------------------------------------------------
-// Copyright (C) 2007-2010 Jay Salvat
+// Copyright (C) 2007-2011 Jay Salvat
 // http://markitup.jaysalvat.com/
 // ----------------------------------------------------------------------------
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,7 +28,7 @@
 	$.fn.markItUp = function(settings, extraSettings) {
 		var options, ctrlKey, shiftKey, altKey;
 		ctrlKey = shiftKey = altKey = false;
-
+	
 		options = {	id:						'',
 					nameSpace:				'',
 					root:					'',
@@ -36,6 +36,7 @@
 					previewAutoRefresh:		true,
 					previewPosition:		'after',
 					previewTemplatePath:	'~/templates/preview.html',
+					previewParser:			false,
 					previewParserPath:		'',
 					previewParserVar:		'data',
 					resizeHandle:			true,
@@ -157,22 +158,14 @@
 						for (j = levels.length -1; j >= 0; j--) {
 							t += levels[j]+"-";
 						}
-						var aHref = $('<a href="" '+key+' title="'+title+'">'+(button.text||button.name||'')+'</a>');
-						if (button.text) {
-							aHref.css('background-image', 'none');
-							if (button.text.length < 2) {
-								aHref.css('text-indent', '0.4em');
-							} else {
-								aHref.css('text-indent', '0');
-							}
-							aHref.addClass('labeled');
-						}
-						li = $('<li class="markItUpButton markItUpButton'+t+(i)+' '+(button.className||'')+'"></li>').append(aHref)
+						li = $('<li class="markItUpButton markItUpButton'+t+(i)+' '+(button.className||'')+'"><a href="" '+key+' title="'+title+'">'+(button.name||'')+'</a></li>')
 						.bind("contextmenu", function() { // prevent contextmenu on mac and allow ctrl+click
 							return false;
 						}).click(function() {
 							return false;
-						}).mousedown(function() {
+						}).bind("focusin", function(){
+                            $$.focus();
+						}).mouseup(function() {
 							if (button.call) {
 								eval(button.call)();
 							}
@@ -241,17 +234,38 @@
 
 			// build block to insert
 			function build(string) {
-				openWith 	= prepare(clicked.openWith);
-				placeHolder = prepare(clicked.placeHolder);
-				replaceWith = prepare(clicked.replaceWith);
-				closeWith 	= prepare(clicked.closeWith);
+				var openWith 			= prepare(clicked.openWith);
+				var placeHolder 		= prepare(clicked.placeHolder);
+				var replaceWith 		= prepare(clicked.replaceWith);
+				var closeWith 			= prepare(clicked.closeWith);
+				var openBlockWith 		= prepare(clicked.openBlockWith);
+				var closeBlockWith 		= prepare(clicked.closeBlockWith);
+				var multiline 			= clicked.multiline;
+				
 				if (replaceWith !== "") {
 					block = openWith + replaceWith + closeWith;
 				} else if (selection === '' && placeHolder !== '') {
 					block = openWith + placeHolder + closeWith;
 				} else {
-					block = openWith + (string||selection) + closeWith;
+					string = string || selection;
+
+					var lines = selection.split(/\r?\n/), blocks = [];
+					
+					for (var l=0; l < lines.length; l++) {
+						line = lines[l];
+						var trailingSpaces;
+						if (trailingSpaces = line.match(/ *$/)) {
+							blocks.push(openWith + line.replace(/ *$/g, '') + closeWith + trailingSpaces);
+						} else {
+							blocks.push(openWith + line + closeWith);
+						}
+					}
+					
+					block = blocks.join("\n");
 				}
+
+				block = openBlockWith + block + closeBlockWith;
+
 				return {	block:block, 
 							openWith:openWith, 
 							replaceWith:replaceWith, 
@@ -265,10 +279,8 @@
 				var len, j, n, i;
 				hash = clicked = button;
 				get();
-
 				$.extend(hash, {	line:"", 
 						 			root:options.root,
-									options: options,
 									textarea:textarea, 
 									selection:(selection||''), 
 									caretPosition:caretPosition,
@@ -280,12 +292,12 @@
 				// callbacks before insertion
 				prepare(options.beforeInsert);
 				prepare(clicked.beforeInsert);
-				if (ctrlKey === true && shiftKey === true) {
+				if ((ctrlKey === true && shiftKey === true) || button.multiline === true) {
 					prepare(clicked.beforeMultiInsert);
 				}			
 				$.extend(hash, { line:1 });
-				
-				if (ctrlKey === true && shiftKey === true) {
+
+				if ((ctrlKey === true && shiftKey === true)) {
 					lines = selection.split(/\r?\n/);
 					for (j = 0, n = lines.length, i = 0; i < n; i++) {
 						if ($.trim(lines[i]) !== '') {
@@ -297,11 +309,12 @@
 					}
 					string = { block:lines.join('\n')};
 					start = caretPosition;
-					len = string.block.length + (($.browser.opera) ? n : 0);
+					len = string.block.length + (($.browser.opera) ? n-1 : 0);
 				} else if (ctrlKey === true) {
 					string = build(selection);
 					start = caretPosition + string.openWith.length;
 					len = string.block.length - string.openWith.length - string.closeWith.length;
+					len = len - (string.block.match(/ $/) ? 1 : 0);
 					len -= fixIeBug(string.block);
 				} else if (shiftKey === true) {
 					string = build(selection);
@@ -336,7 +349,7 @@
 				$.extend(hash, { line:'', selection:selection });
 
 				// callbacks after insertion
-				if (ctrlKey === true && shiftKey === true) {
+				if ((ctrlKey === true && shiftKey === true) || button.multiline === true) {
 					prepare(clicked.afterMultiInsert);
 				}
 				prepare(clicked.afterInsert);
@@ -372,7 +385,7 @@
 					var newSelection = document.selection.createRange();
 					newSelection.text = block;
 				} else {
-					$$.val($$.val().substring(0, caretPosition)	+ block + $$.val().substring(caretPosition + selection.length, $$.val().length));
+					textarea.value =  textarea.value.substring(0, caretPosition)  + block + textarea.value.substring(caretPosition + selection.length, textarea.value.length);
 				}
 			}
 
@@ -406,7 +419,7 @@
 						var range = document.selection.createRange(), rangeCopy = range.duplicate();
 						rangeCopy.moveToElementText(textarea);
 						caretPosition = -1;
-						while(rangeCopy.inRange(range)) { // fix most of the ie bugs with linefeeds...
+						while(rangeCopy.inRange(range)) {
 							rangeCopy.moveStart('character');
 							caretPosition ++;
 						}
@@ -415,7 +428,8 @@
 					}
 				} else { // gecko & webkit
 					caretPosition = textarea.selectionStart;
-					selection = $$.val().substring(caretPosition, textarea.selectionEnd);
+
+					selection = textarea.value.substring(caretPosition, textarea.selectionEnd);
 				} 
 				return selection;
 			}
@@ -425,6 +439,9 @@
 				if (!previewWindow || previewWindow.closed) {
 					if (options.previewInWindow) {
 						previewWindow = window.open('', 'preview', options.previewInWindow);
+						$(window).unload(function() {
+							previewWindow.close();
+						});
 					} else {
 						iFrame = $('<iframe class="markItUpPreviewFrame"></iframe>');
 						if (options.previewPosition == 'after') {
@@ -435,7 +452,6 @@
 						previewWindow = iFrame[iFrame.length - 1].contentWindow || frame[iFrame.length - 1];
 					}
 				} else if (altKey === true) {
-					// Thx Stephen M. Redd for the IE8 fix
 					if (iFrame) {
 						iFrame.remove();
 					} else {
@@ -446,6 +462,9 @@
 				if (!options.previewAutoRefresh) {
 					refreshPreview(); 
 				}
+				if (options.previewInWindow) {
+					previewWindow.focus();
+				}
 			}
 
 			// refresh Preview window
@@ -455,23 +474,30 @@
 
 			function renderPreview() {		
 				var phtml;
-				if (options.previewParserPath !== '') {
-					$.ajax( {
+				if (options.previewParser && typeof options.previewParser === 'function') {
+					var data = options.previewParser( $$.val() );
+					writeInPreview( localize(data, 1) ); 
+				} else if (options.previewParserPath !== '') {
+					$.ajax({
 						type: 'POST',
+						dataType: 'text',
+						global: false,
 						url: options.previewParserPath,
 						data: options.previewParserVar+'='+encodeURIComponent($$.val()),
 						success: function(data) {
 							writeInPreview( localize(data, 1) ); 
 						}
-					} );
+					});
 				} else {
 					if (!template) {
-						$.ajax( {
+						$.ajax({
 							url: options.previewTemplatePath,
+							dataType: 'text',
+							global: false,
 							success: function(data) {
 								writeInPreview( localize(data, 1).replace(/<!-- content -->/g, $$.val()) );
 							}
-						} );
+						});
 					}
 				}
 				return false;
@@ -489,24 +515,21 @@
 					previewWindow.document.close();
 					previewWindow.document.documentElement.scrollTop = sp;
 				}
-				if (options.previewInWindow) {
-					previewWindow.focus();
-				}
 			}
 			
 			// set keys pressed
 			function keyPressed(e) { 
 				shiftKey = e.shiftKey;
 				altKey = e.altKey;
-				ctrlKey = (!(e.altKey && e.ctrlKey)) ? e.ctrlKey : false;
+				ctrlKey = (!(e.altKey && e.ctrlKey)) ? (e.ctrlKey || e.metaKey) : false;
 
 				if (e.type === 'keydown') {
 					if (ctrlKey === true) {
-						li = $("a[accesskey="+String.fromCharCode(e.keyCode)+"]", header).parent('li');
+						li = $('a[accesskey="'+String.fromCharCode(e.keyCode)+'"]', header).parent('li');
 						if (li.length !== 0) {
 							ctrlKey = false;
 							setTimeout(function() {
-								li.triggerHandler('mousedown');
+								li.triggerHandler('mouseup');
 							},1);
 							return false;
 						}
@@ -526,7 +549,7 @@
 						}
 					}
 					if (e.keyCode === 9) { // Tab key
-						if (shiftKey == true || ctrlKey == true || altKey == true) { // Thx Dr Floob.
+						if (shiftKey == true || ctrlKey == true || altKey == true) {
 							return false; 
 						}
 						if (caretOffset !== -1) {
