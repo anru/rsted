@@ -5,16 +5,16 @@
         <meta charset="UTF-8">
         <title>{% block title %}Online reStructuredText editor{% endblock %}</title>
 
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/base.css"/>
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/site.css"/>
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/menu.css"/>
+	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/base.css"/>
+	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/site.css"/>
+	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/menu.css"/>
 
-        <link rel="stylesheet" href="{{ MEDIA_URL }}style/overcast/jquery-ui-1.8.16.custom.css" />
+	<link rel="stylesheet" href="{{ request.script_root }}{{ MEDIA_URL }}style/overcast/jquery-ui-1.8.16.custom.css" />
 
 
-        <script src="{{ MEDIA_URL }}scripts/jquery-1.6.4.min.js"></script>
-        <script src="{{ MEDIA_URL }}scripts/jquery-ui-1.8.16.custom.min.js"></script>
-        <script src="{{ MEDIA_URL }}scripts/jquery.layout.min-1.2.0.js"></script>
+	<script src="{{ request.script_root }}{{ MEDIA_URL }}scripts/jquery-1.6.4.min.js"></script>
+	<script src="{{ request.script_root }}{{ MEDIA_URL }}scripts/jquery-ui-1.8.16.custom.min.js"></script>
+	<script src="{{ request.script_root }}{{ MEDIA_URL }}scripts/jquery.layout.min-1.2.0.js"></script>
 
         {% endblock %}
     </head>
@@ -35,6 +35,7 @@
             </menu>
         </header>
         <script type="text/javascript">
+            var script_root = {{ request.script_root|tojson|safe }};
             $('#navigation').find("li.active a").click(function(evt) {
                  evt.preventDefault();
              });

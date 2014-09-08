@@ -2,13 +2,13 @@
 
 {% block head %}
     {{ super() }}
-	<script type="text/javascript" src="{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
-	<script type="text/javascript" src="{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
+    <script type="text/javascript" src="{{ request.script_root }}{{ MEDIA_URL }}markit/jquery.markitup.js"></script>
+    <script type="text/javascript" src="{{ request.script_root }}{{ MEDIA_URL }}markit/sets/rest/set.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/skins/simple/style.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}markit/sets/rest/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ request.script_root }}{{ MEDIA_URL }}markit/skins/simple/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ request.script_root }}{{ MEDIA_URL }}markit/sets/rest/style.css" />
 
-<script type="text/javascript" src="{{ MEDIA_URL }}scripts/editor.js"></script>
+    <script type="text/javascript" src="{{ request.script_root }}{{ MEDIA_URL }}scripts/editor.js"></script>
 
 <script type="text/javascript">
     var js_params = {{ js_params|tojson|safe }};
@@ -64,13 +64,13 @@
         </div>
 
 
-        <iframe src="/srv/rst2html/" id="browse"></iframe>
+	<iframe src="{{ request.script_root }}/srv/rst2html/" id="browse"></iframe>
     </div>
 </div>
 
 </div>
 
-<form id="save_as_pdf" method="POST" action="/srv/rst2pdf/">
+<form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">
     <input type="hidden" id="as_pdf_rst" name="rst" />
     <input type="hidden" id="as_pdf_theme" name="theme"/>
 </form>
