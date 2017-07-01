@@ -11,6 +11,23 @@ function getSelectedTheme() {
     return theme;
 }
 
+function b64EncodeUnicode(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
+}
+
+function b64DecodeUnicode(str) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
 function getQueryArgs(locSearch) {
     locSearch = locSearch || window.location.search;
     var args = {};
@@ -19,10 +36,6 @@ function getQueryArgs(locSearch) {
         args[key] = window.decodeURIComponent(value);
     });
     return args;
-}
-
-function getCurrentDocument() {
-    return getQueryArgs()['n'];
 }
 
 
@@ -91,14 +104,22 @@ function syncScrollPosition() {
 
 var activeXhr = null;
 var lastContent = null;
+var renderedHash = null;
 
-function genPreview() {
-    var self = $('textarea#editor');
+function probablyChanged() {
+    var self = $('#editor');
     var rstContent = self.val();
     if (activeXhr || lastContent == rstContent) {
         //activeXhr.abort();
         return;
     }
+    syncHashAndUpdate();
+}
+
+function genPreview() {
+    var self = $('#editor');
+    var rstContent = self.val();
+
     lastContent = rstContent;
     activeXhr = $.ajax({
         'url': script_root + '/srv/rst2html/',
@@ -106,6 +127,7 @@ function genPreview() {
         'type': 'POST',
         'error': function(xhr) {
             setPreviewHtml(xhr.responseText);
+            activeXhr = null;
         },
         'success': function(response) {
             setPreviewHtml(response);
@@ -117,11 +139,40 @@ function genPreview() {
 
 var timerId = null;
 
-function getCurrentLink(res) {
-    if (!res) {
-        return '//' + window.location.host + script_root + '/?theme=' + getSelectedTheme();
+function syncState(rst) {
+    location.hash = '#' + b64EncodeUnicode(rst);
+}
+
+function syncHashAndUpdate() {
+    var self = $('#editor');
+    var rstContent = self.val();
+    syncState(rstContent);
+    genPreview();
+}
+
+function getDecodedHash() {
+    return b64DecodeUnicode(location.hash.substr(1));
+}
+
+window.onhashchange = function(ev) {
+    $('textarea#editor').val(getDecodedHash());
+}
+
+window.onpopstate = function(ev) {
+    var doUpdate = false;
+    var stateTheme = getQueryArgs()['theme'] || 'basic';
+    if (stateTheme != getSelectedTheme()) {
+        $('.themes input[value='+ stateTheme + ']')[0].checked = true;
+        doUpdate = true;
     }
-    return '//' + window.location.host + script_root + '/?n=' + res + '&theme=' + getSelectedTheme();
+    if (getDecodedHash() != lastContent) {
+        $('#editor').val(getDecodedHash());
+        doUpdate = true;
+    }
+
+    if (doUpdate) {
+        genPreview();
+    }
 }
 
 function adjustBrowse() {
@@ -133,12 +184,10 @@ function adjustBrowse() {
 
 
 $(function() {
-    //$('<button>Conver!</button>').click(genPreview).appendTo($('body'));
-
     window.baseTitle = $('head title').text();
 
-    $('textarea#editor').bind('change', genPreview).markItUp(mySettings);
-    timerId = window.setInterval(genPreview, 900);
+    $('textarea#editor').bind('change', probablyChanged).markItUp(mySettings);
+    timerId = window.setInterval(probablyChanged, 900);
     window.setTimeout(function() {
         $('#editor-td > div').css({'width': '100%', 'height': '96%'});
     }, 200);
@@ -146,39 +195,8 @@ $(function() {
     $('textarea#editor').scroll(syncScrollPosition);
 
     $('.themes input').bind('change', function() {
-        lastContent = null;
+        history.pushState({theme: getSelectedTheme()}, document.title, '/?theme=' + getSelectedTheme() + location.hash);
         genPreview();
-    });
-
-    $('#save_link').click(function(e) {
-
-        $.ajax({
-            'url': script_root + '/srv/save_rst/',
-            'type': 'POST',
-            'data': {'rst': $('textarea#editor').val()},
-            'success': function(response) {
-                window.location = getCurrentLink(response + '');
-                $('textarea#editor').focus();
-            }
-
-        });
-
-        e.preventDefault();
-        return false;
-    });
-
-    $('#del_link').click(function(e) {
-        $.ajax({
-            'url': script_root + '/srv/del_rst/',
-            'type': 'GET',
-            'data': {'n': getCurrentDocument()},
-            'success': function(response) {
-                window.location = getCurrentLink();
-            }
-        });
-
-        e.preventDefault();
-        return false;
     });
 
     $('#as_pdf').click(function(e) {

@@ -16,8 +16,9 @@
 	    if (js_params.theme) {
 	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
 	    }
-	    if (js_params.rst) {
-	        $('#editor').val(js_params.rst);
+
+	    if (location.hash) {
+	        $('#editor').val(getDecodedHash());
 	    }
 	});
 
@@ -29,18 +30,6 @@
 {% block editor_nav %}
 <ul>
     <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
-    <li>{% if document %}
-    	<a href="#" id="save" class="jslink">Save</a>
-    {% else %}
-    	<a href="#" id="save_link" class="jslink">Save with unique link</a>
-    {% endif %}
-    </li>
-    <li>
-    {% if document %}
-    <a href="#" id="del_link" class="jslink">
-    {% else %}&nbsp;&nbsp;{% endif %}Delete
-    {% if document %}</a>{% endif %}
-    </li>
 </ul>
 {% endblock %}
 
@@ -55,16 +44,8 @@
                 <input id="t_basic" type="radio" value="basic" checked="checked" name="style"/><label for="t_basic">Basic</label>
                 <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
             </div>
-            <div class="actions right">
-                <button id="save_link">Save with unique link</button>
-                {% if document %}
-                <button id="del_link">Delete</button>
-                {% endif %}
-            </div>
         </div>
-
-
-	<iframe src="{{ request.script_root }}/srv/rst2html/" id="browse"></iframe>
+	    <iframe src="{{ request.script_root }}/srv/rst2html/" id="browse"></iframe>
     </div>
 </div>
 
