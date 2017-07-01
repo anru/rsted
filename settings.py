@@ -2,6 +2,8 @@
 # configuration
 DEBUG = True
 
+FEATURE_101 = True
+
 RUN_PATH = 'var/run'
 PID_FILE = 'fastcgi.pid'
 SOCKET_FILE = 'rsted.sock'
