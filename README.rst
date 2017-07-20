@@ -8,7 +8,6 @@ Getting setup
 Requirements for rsted:
 
 * Flask
-* Redis
 * rst2html (from Docutils)
 
 These requirements are expressed in the pip-requirements.txt file and may be
