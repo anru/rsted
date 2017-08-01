@@ -13,7 +13,7 @@ Requirements for rsted:
 These requirements are expressed in the pip-requirements.txt file and may be
 installed by running the following (from within a virtual environment)::
 
-    pip install -r pip-requirements.txt
+    pip install -r requirements.txt
 
 
 How to run
