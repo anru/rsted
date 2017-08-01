@@ -1,12 +1,6 @@
 
-import os
-import sys
-from os.path import join as J
-#import codecs
-
+import os.path
 from docutils.core import publish_string
-
-#utf8codec = codecs.lookup('utf-8')
 
 # see http://docutils.sourceforge.net/docs/user/config.html
 default_rst_opts = {
@@ -20,6 +14,7 @@ default_rst_opts = {
     'halt_level': 5,
 }
 
+
 def rst2html(rst, theme=None, opts=None):
     rst_opts = default_rst_opts.copy()
     if opts:
@@ -29,7 +24,7 @@ def rst2html(rst, theme=None, opts=None):
     stylesheets = ['basic.css']
     if theme:
         stylesheets.append('%s/%s.css' % (theme, theme))
-    rst_opts['stylesheet'] = ','.join([J('var/themes/', p) for p in stylesheets ])
+    rst_opts['stylesheet'] = ','.join([os.path.join('var/themes/', p) for p in stylesheets ])
 
     out = publish_string(rst, writer_name='html', settings_overrides=rst_opts)
 

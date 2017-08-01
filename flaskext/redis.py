@@ -1,9 +1,8 @@
 from __future__ import absolute_import
+
 import redis
-from flask import g
 
 class RedisManager(object):
-
     def __init__(self, app=None):
 
         if app is not None:
@@ -25,12 +24,11 @@ class RedisManager(object):
         self.app = app
         self._connect()
 
-
     def _connect(self):
         self.instance = redis.Redis(host=self.app.config['REDIS_HOST'],
-                           port=self.app.config['REDIS_PORT'],
-                           db=self.app.config['REDIS_DB'],
-                           password=self.app.config['REDIS_PASSWORD'])
+                                    port=self.app.config['REDIS_PORT'],
+                                    db=self.app.config['REDIS_DB'],
+                                    password=self.app.config['REDIS_PASSWORD'])
 
     def get_instance(self):
         return self.instance
