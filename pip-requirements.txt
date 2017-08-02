@@ -1,6 +1,0 @@
-flup
-flask
-rst2pdf
-
-# Docutils (for rst2html)
-docutils

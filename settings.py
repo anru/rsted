@@ -12,6 +12,9 @@ HOST = "0.0.0.0"  ## Listen IP
                   ## 127.0.0.1 is localhost only.
 PORT = 5000
 
+INPUT_DIR = './db/rst'
+OUTPUT_DIR = './db/html'
+
 
 try:
     from settings_local import *
