@@ -1,6 +1,7 @@
 
 import os.path
 from docutils.core import publish_string
+from sphinx import main
 
 # see http://docutils.sourceforge.net/docs/user/config.html
 default_rst_opts = {
@@ -24,9 +25,7 @@ def rst2html(rst, theme=None, opts=None):
     stylesheets = ['basic.css']
     if theme:
         stylesheets.append('%s/%s.css' % (theme, theme))
-    rst_opts['stylesheet'] = ','.join([os.path.join('var/themes/', p) for p in stylesheets ])
+    rst_opts['stylesheet'] = ','.join([os.path.join('var/themes/', p) for p in stylesheets])
 
-    out = publish_string(rst, writer_name='html', settings_overrides=rst_opts)
-
-    return out
+    return publish_string(rst, writer_name='html', settings_overrides=rst_opts)
 

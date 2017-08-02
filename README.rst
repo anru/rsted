@@ -1,6 +1,4 @@
-Simple online editor for reStructuredText on Flask.
-
-Try it where: http://rst.ninjs.org/
+RST Editor for reStructuredText on Flask.
 
 Getting setup
 -------------
@@ -8,13 +6,12 @@ Getting setup
 Requirements for rsted:
 
 * Flask
-* rst2html (from Docutils)
+* Sphinx
 
 These requirements are expressed in the pip-requirements.txt file and may be
 installed by running the following (from within a virtual environment)::
 
     pip install -r requirements.txt
-
 
 How to run
 ----------
