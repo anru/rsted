@@ -36,7 +36,7 @@
 {% block content %}
 <div class="b_page_cont">
     <div class="b_page_left">
-        <textarea id="editor" rows="15">{{ rst }}</textarea>
+        <textarea id="editor" rows="15" name="text" form="save_as_pdf">{{ rst }}</textarea>
     </div>
     <div class="b_page_right">
         <div class="right_nav">
@@ -45,15 +45,16 @@
                 <input id="t_nature" type="radio" value="nature" name="style"/><label for="t_nature">Nature</label>
             </div>
         </div>
+        <div class="right">
+            <form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">
+                <input type="submit" id="as_pdf_rst" name="rst" value="Export to PDF"/>
+                <input type="hidden" id="as_pdf_theme" name="theme"/>
+            </form>
+        </div>
 	    <iframe src="{{ request.script_root }}/srv/rst2html/" id="browse"></iframe>
     </div>
 </div>
 
 </div>
-
-<form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">
-    <input type="hidden" id="as_pdf_rst" name="rst" />
-    <input type="hidden" id="as_pdf_theme" name="theme"/>
-</form>
 
 {% endblock %}
