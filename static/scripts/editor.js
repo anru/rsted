@@ -158,15 +158,24 @@ window.onhashchange = function(ev) {
     $('textarea#editor').val(getDecodedHash());
 }
 
+function reactForTheme(theme) {
+    $('.themes input[value='+ theme + ']')[0].checked = true;
+    $('#as_pdf_theme').attr('value', getSelectedTheme());
+}
+
+function reactForRst(rst) {
+    $('#editor').val(rst)
+}
+
 window.onpopstate = function(ev) {
     var doUpdate = false;
     var stateTheme = getQueryArgs()['theme'] || 'basic';
     if (stateTheme != getSelectedTheme()) {
-        $('.themes input[value='+ stateTheme + ']')[0].checked = true;
+        reactForTheme(stateTheme)
         doUpdate = true;
     }
     if (getDecodedHash() != lastContent) {
-        $('#editor').val(getDecodedHash());
+        reactForRst(getDecodedHash())
         doUpdate = true;
     }
 
@@ -199,18 +208,7 @@ $(function() {
         genPreview();
     });
 
-    $('#as_pdf').click(function(e) {
-        var form = $('#save_as_pdf');
-        $('#as_pdf_rst').attr('value', $("#editor").val());
-        $('#as_pdf_theme').attr('value', getSelectedTheme());
-        form.submit();
+    adjustBrowse();
 
-        e.preventDefault();
-        return false;
-    });
-
-     adjustBrowse();
-
-     $(window).bind('resize', adjustBrowse);
-
+    $(window).bind('resize', adjustBrowse);
 });

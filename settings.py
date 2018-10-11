@@ -1,6 +1,7 @@
+import os
 
 # configuration
-DEBUG = True
+DEBUG = not os.environ.has_key('RSTED_PROD')
 
 RUN_PATH = 'var/run'
 PID_FILE = 'fastcgi.pid'

@@ -14,11 +14,11 @@
     var js_params = {{ js_params|tojson|safe }};
 	$(function() {
 	    if (js_params.theme) {
-	        $('.themes input[value='+ js_params.theme + ']')[0].checked = true;
+            reactForTheme(js_params.theme)
 	    }
 
 	    if (location.hash) {
-	        $('#editor').val(getDecodedHash());
+            reactForRst(getDecodedHash())
 	    }
 	});
 
@@ -27,16 +27,10 @@
 {% endblock %}
 
 
-{% block editor_nav %}
-<ul>
-    <li><a href="#" id="as_pdf" class="jslink">Export to PDF</a></li>
-</ul>
-{% endblock %}
-
 {% block content %}
 <div class="b_page_cont">
     <div class="b_page_left">
-        <textarea id="editor" rows="15" name="text" form="save_as_pdf">{{ rst }}</textarea>
+        <textarea id="editor" rows="15" name="rst" form="save_as_pdf">{{ rst }}</textarea>
     </div>
     <div class="b_page_right">
         <div class="right_nav">
@@ -47,7 +41,7 @@
         </div>
         <div class="right">
             <form id="save_as_pdf" method="POST" action="{{ request.script_root }}/srv/rst2pdf/">
-                <input type="submit" id="as_pdf_rst" name="rst" value="Export to PDF"/>
+                <input type="submit" value="Export to PDF"/>
                 <input type="hidden" id="as_pdf_theme" name="theme"/>
             </form>
         </div>
